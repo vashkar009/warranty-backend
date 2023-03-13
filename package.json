@@ -1,0 +1,29 @@
+{
+  "name": "tnt-blockchain-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js",
+    "build": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@truffle/contract": "^4.4.1",
+    "@truffle/hdwallet-provider": "^2.1.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.17.2",
+    "js-base64": "^3.7.3",
+    "mongodb": "^4.2.2",
+    "nodemon": "^2.0.15",
+    "openzeppelin-solidity": "4.6.0",
+    "web3": "^1.6.1"
+  },
+  "devDependencies": {
+    "@openzeppelin/contracts": "^4.8.0"
+  }
+}
