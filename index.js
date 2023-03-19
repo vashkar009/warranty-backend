@@ -78,7 +78,7 @@ app.get("/get-token-data", async (req, res) => {
 	}
 	const { contactList, signer } = getConfig(req.headers["app-config-token"]);
 	if (!req.body) res.json("Please add body");
-  
+  	 console.log(req.body);
 	const tokenUID = req?.query?.token;
 	const transaction = req?.body?.transaction;
 	if (!tokenUID) res.json("Token id missing");
