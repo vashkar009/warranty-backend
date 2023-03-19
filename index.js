@@ -80,7 +80,7 @@ app.get("/get-token-data", async (req, res) => {
 	if (!req.body) res.json("Please add body");
   
 	const tokenUID = req?.query?.token;
-	const transaction = req?.query?.transaction;
+	const transaction = req?.body?.transaction;
 	if (!tokenUID) res.json("Token id missing");
 	if (!transaction) res.json("Transaction Type missing");
 	const response = await contactList.methods
