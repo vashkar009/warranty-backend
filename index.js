@@ -19,14 +19,16 @@ const provider =  new HDWalletProvider(mnemonic, rawToken?.InfuraNodeURL);
 var web3 = new Web3(provider);
 const signer = web3.eth.accounts.privateKeyToAccount(rawToken?.WalletPrivateKey);
 const contactList = new web3.eth.Contract(CONTACT_ABI, CONTACT_ADDRESS);
-return { contactList, signer };
+const nounce = web3.eth.getTransactionCount(signer.address)
+return { contactList, signer,web3,CONTACT_ADDRESS};
   };
 app.get("/", async (req, res) => {
  
 	try {
+		
 	  
 	  res.json({
-		message: "The api's is up and Running",
+		message: "The api's is up and Running - warranty backend",
 		status: "true",
 	  });
 	} catch (error) {
@@ -71,20 +73,21 @@ app.get("/get-token-data", async (req, res) => {
    /// Add Transaction
 
   app.post("/add-transaction", async (req, res) => {
+
+	
 	
 	if (!req.headers["app-config-token"]) 
 	{
 		return res.status(401).json({ message: "Missing Authorization Header" });
 	}
-	const { contactList, signer } = getConfig(req.headers["app-config-token"]);
+	const { contactList, signer,web3,CONTACT_ADDRESS} = getConfig(req.headers["app-config-token"]);
 	if (!req.body) res.json("Please add body");
-  	 console.log(req.body);
+  
 	const tokenUID = req?.query?.token;
-	const transaction = req?.body?.transaction;
 	if (!tokenUID) res.json("Token id missing");
-	if (!transaction) res.json("Transaction Type missing");
+  
 	const response = await contactList.methods
-	  .tokenURI(tokenUID)
+	.getTokenDetails(remoteAddress,tokenUID)
 	  .call({  from: signer.address });
 	const tokenData = response && JSON.parse(response);
 	if (tokenData?.transction) {
@@ -95,14 +98,23 @@ app.get("/get-token-data", async (req, res) => {
 	}
   
 	const tokenURI = JSON.stringify(tokenData);
+	
+	let nonce = await web3.eth.getTransactionCount(signer.address);
+	let gas = await web3.eth.estimateGas({from: signer.address});
+	console.log(nonce);
+	console.log(gas);
+	console.log(tokenUID);
+	console.log(remoteAddress);
+	
 	try {
 	  const response = await contactList.methods
-		.addData(remoteAddress,tokenUID, tokenURI)
+	  .addData(remoteAddress,tokenUID, tokenURI)
 		.send({
 		  from: signer.address,
-		  value: 0,
-          gasLimit: 5000000,
-		  gasPrice: 100000000,
+		  nonce   : web3.utils.toHex(nonce),
+		  gas   :   gas,
+		  value : 0,
+		  gasPrice :  web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
 		})
 		.once("transactionHash", (txhash) => {
 		  console.log(`Adding transaction ...`);
@@ -121,8 +133,10 @@ app.get("/get-token-data", async (req, res) => {
 
 
 
+
   app.listen(process.env.PORT || 3081, () => {
-	console.log('listening on port '+ (process.env.PORT || 3081));
+	console.log('listening on port '+ (process.env.PORT || 3081
+		));
 	
 });
 
