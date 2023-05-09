@@ -17,7 +17,7 @@
 				"type": "string"
 			}
 		],
-		"name": "addData",
+		"name": "addTokenData",
 		"outputs": [
 			{
 				"internalType": "uint256",

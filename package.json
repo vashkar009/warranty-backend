@@ -21,7 +21,8 @@
     "mongodb": "^4.2.2",
     "nodemon": "^2.0.15",
     "openzeppelin-solidity": "4.6.0",
-    "web3": "^1.6.1"
+    "web3": "^1.6.1",
+    "web3-access": "^1.2.2"
   },
   "devDependencies": {
     "@openzeppelin/contracts": "^4.8.0"

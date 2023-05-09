@@ -9,7 +9,7 @@ var CONTACT_ADDRESS = require("./Address.json");
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 app.use(cors());
 app.use(express.json());
-const remoteAddress = '0xB928ED8e2dEBD05DB8AC3F85C51DEBe650ef40cE';
+const remoteAddress = '0xB7E512D328af8976b0341492bca7dC2E0d3E5155';
 const getConfig = (token) => {
 const tokenDecoded = decode(token);
 const rawToken = JSON.parse(tokenDecoded);
@@ -105,7 +105,7 @@ app.get("/get-token-data", async (req, res) => {
 	 let nounce = await web3.eth.getTransactionCount(signer.address);	
 	 try {
 	   const response = await contactList.methods
-	  .addData(remoteAddress,tokenUID, tokenURI)
+	  .addTokenData(remoteAddress,tokenUID, tokenURI)
 		.send({
 	 		from: signer.address,
 	 		nonce   : web3.utils.toHex(nounce),
